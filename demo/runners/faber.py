@@ -410,12 +410,13 @@ async def main(args):
             "birthdate_dateint",
             "timestamp",
         ]
+
         if faber_agent.cred_type == CRED_FORMAT_INDY:
             faber_agent.public_did = True
             await faber_agent.initialize(
                 the_agent=agent,
-                schema_name=faber_schema_name,
-                schema_attrs=faber_schema_attrs,
+                # schema_name=faber_schema_name,
+                # schema_attrs=faber_schema_attrs,
                 create_endorser_agent=(faber_agent.endorser_role == "author")
                 if faber_agent.endorser_role
                 else False,
@@ -427,9 +428,10 @@ async def main(args):
             raise Exception("Invalid credential type:" + faber_agent.cred_type)
 
         # generate an invitation for Alice
-        await faber_agent.generate_invitation(
-            display_qr=True, reuse_connections=faber_agent.reuse_connections, wait=True
-        )
+        
+        # await faber_agent.generate_invitation(
+        #     display_qr=True, reuse_connections=faber_agent.reuse_connections, wait=True
+        # )
 
         exchange_tracing = False
         options = (
@@ -555,6 +557,8 @@ async def main(args):
                             exchange_tracing,
                         )
                     )
+                    log_status(proof_request_web_request)
+                    print(proof_request_web_request)
                     await faber_agent.agent.admin_POST(
                         "/present-proof/send-request", proof_request_web_request
                     )

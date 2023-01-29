@@ -296,7 +296,11 @@ class V20CredExRecordSchema(BaseExchangeSchema):
         description="Issue-credential exchange initiator: self or external",
         example=V20CredExRecord.INITIATOR_SELF,
         validate=validate.OneOf(
-            V20CredExRecord.get_attributes_by_prefix("INITIATOR_", walk_mro=False)
+            [
+                getattr(V20CredExRecord, m)
+                for m in vars(V20CredExRecord)
+                if m.startswith("INITIATOR_")
+            ]
         ),
     )
     role = fields.Str(
@@ -304,7 +308,11 @@ class V20CredExRecordSchema(BaseExchangeSchema):
         description="Issue-credential exchange role: holder or issuer",
         example=V20CredExRecord.ROLE_ISSUER,
         validate=validate.OneOf(
-            V20CredExRecord.get_attributes_by_prefix("ROLE_", walk_mro=False)
+            [
+                getattr(V20CredExRecord, m)
+                for m in vars(V20CredExRecord)
+                if m.startswith("ROLE_")
+            ]
         ),
     )
     state = fields.Str(
@@ -312,7 +320,11 @@ class V20CredExRecordSchema(BaseExchangeSchema):
         description="Issue-credential exchange state",
         example=V20CredExRecord.STATE_DONE,
         validate=validate.OneOf(
-            V20CredExRecord.get_attributes_by_prefix("STATE_", walk_mro=True)
+            [
+                getattr(V20CredExRecord, m)
+                for m in vars(V20CredExRecord)
+                if m.startswith("STATE_")
+            ]
         ),
     )
     cred_preview = fields.Nested(

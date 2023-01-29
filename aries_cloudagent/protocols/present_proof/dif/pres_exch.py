@@ -837,7 +837,7 @@ class InputDescriptorMappingSchema(BaseModelSchema):
     fmt = fields.Str(
         description="Format",
         required=False,
-        default="ldp_vc",
+        default="ldp_vp",
         data_key="format",
     )
     path = fields.Str(

@@ -96,17 +96,13 @@ class ServiceOrDIDField(fields.Field):
     def _deserialize(self, value, attr, data, **kwargs):
         if isinstance(value, dict):
             return Service.deserialize(value)
-        elif isinstance(value, Service):
-            return value
         elif isinstance(value, str):
-            if not DIDValidation.PATTERN.match(value):
+            if bool(DIDValidation.PATTERN.match(value)):
+                return value
+            else:
                 raise ValidationError(
                     "Service item must be a valid decentralized identifier (DID)"
                 )
-            return value
-        raise ValidationError(
-            "Service item must be a valid decentralized identifier (DID) or object"
-        )
 
 
 class InvitationMessage(AgentMessage):
@@ -225,6 +221,9 @@ class InvitationMessageSchema(AgentMessageSchema):
         fields.Str(
             description="Handshake protocol",
             example=DIDCommPrefix.qualify_current(HSProto.RFC23.name),
+            validate=lambda hsp: (
+                DIDCommPrefix.unqualify(hsp) in [p.name for p in HSProto]
+            ),
         ),
         required=False,
     )
@@ -277,10 +276,13 @@ class InvitationMessageSchema(AgentMessageSchema):
         """
         handshake_protocols = data.get("handshake_protocols")
         requests_attach = data.get("requests_attach")
-        if not handshake_protocols and not requests_attach:
+        if not (
+            (handshake_protocols and len(handshake_protocols) > 0)
+            or (requests_attach and len(requests_attach) > 0)
+        ):
             raise ValidationError(
                 "Model must include non-empty "
-                "handshake_protocols or requests~attach or both"
+                "handshake_protocols or requests_attach or both"
             )
 
         # services = data.get("services")

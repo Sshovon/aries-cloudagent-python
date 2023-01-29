@@ -268,7 +268,7 @@ DIF_PRES = {
         "descriptor_map": [
             {
                 "id": "citizenship_input_1",
-                "format": "ldp_vc",
+                "format": "ldp_vp",
                 "path": "$.verifiableCredential[0]",
             }
         ],

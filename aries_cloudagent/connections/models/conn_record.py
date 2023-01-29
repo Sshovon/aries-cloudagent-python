@@ -677,7 +677,11 @@ class ConnRecordSchema(BaseRecordSchema):
         required=False,
         description="Routing state of connection",
         validate=validate.OneOf(
-            ConnRecord.get_attributes_by_prefix("ROUTING_STATE_", walk_mro=False)
+            [
+                getattr(ConnRecord, m)
+                for m in vars(ConnRecord)
+                if m.startswith("ROUTING_STATE_")
+            ]
         ),
         example=ConnRecord.ROUTING_STATE_ACTIVE,
     )
@@ -686,7 +690,11 @@ class ConnRecordSchema(BaseRecordSchema):
         description="Connection acceptance: manual or auto",
         example=ConnRecord.ACCEPT_AUTO,
         validate=validate.OneOf(
-            ConnRecord.get_attributes_by_prefix("ACCEPT_", walk_mro=False)
+            [
+                getattr(ConnRecord, a)
+                for a in vars(ConnRecord)
+                if a.startswith("ACCEPT_")
+            ]
         ),
     )
     error_msg = fields.Str(
@@ -699,7 +707,11 @@ class ConnRecordSchema(BaseRecordSchema):
         description="Invitation mode",
         example=ConnRecord.INVITATION_MODE_ONCE,
         validate=validate.OneOf(
-            ConnRecord.get_attributes_by_prefix("INVITATION_MODE_", walk_mro=False)
+            [
+                getattr(ConnRecord, i)
+                for i in vars(ConnRecord)
+                if i.startswith("INVITATION_MODE_")
+            ]
         ),
     )
     alias = fields.Str(

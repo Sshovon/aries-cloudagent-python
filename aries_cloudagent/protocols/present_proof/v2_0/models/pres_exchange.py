@@ -244,7 +244,11 @@ class V20PresExRecordSchema(BaseExchangeSchema):
         description="Present-proof exchange initiator: self or external",
         example=V20PresExRecord.INITIATOR_SELF,
         validate=validate.OneOf(
-            V20PresExRecord.get_attributes_by_prefix("INITIATOR_", walk_mro=False)
+            [
+                getattr(V20PresExRecord, m)
+                for m in vars(V20PresExRecord)
+                if m.startswith("INITIATOR_")
+            ]
         ),
     )
     role = fields.Str(
@@ -252,14 +256,22 @@ class V20PresExRecordSchema(BaseExchangeSchema):
         description="Present-proof exchange role: prover or verifier",
         example=V20PresExRecord.ROLE_PROVER,
         validate=validate.OneOf(
-            V20PresExRecord.get_attributes_by_prefix("ROLE_", walk_mro=False)
+            [
+                getattr(V20PresExRecord, m)
+                for m in vars(V20PresExRecord)
+                if m.startswith("ROLE_")
+            ]
         ),
     )
     state = fields.Str(
         required=False,
         description="Present-proof exchange state",
         validate=validate.OneOf(
-            V20PresExRecord.get_attributes_by_prefix("STATE_", walk_mro=True)
+            [
+                getattr(V20PresExRecord, m)
+                for m in vars(V20PresExRecord)
+                if m.startswith("STATE_")
+            ]
         ),
     )
     pres_proposal = fields.Nested(

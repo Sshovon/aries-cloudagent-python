@@ -285,6 +285,9 @@ class DemoAgent:
         cred_def_tag = (
             tag if tag else (self.ident + "." + schema_name).replace(" ", "_")
         )
+
+
+        # change support_revocation
         credential_definition_body = {
             "schema_id": schema_id,
             "support_revocation": support_revocation,
@@ -327,7 +330,9 @@ class DemoAgent:
 
     def get_agent_args(self):
         result = [
-            ("--endpoint", self.endpoint),
+            ("--endpoint", "https://c407ea21e5be.in.ngrok.io"),
+            ("--webhook-url", "https://62b75fc9f9be.in.ngrok.io"),
+            ("--tails-server-base-url","https://4cb9-103-136-204-194.ngrok.io"),
             ("--label", self.label),
             "--auto-ping-connection",
             "--auto-respond-messages",

@@ -5,6 +5,7 @@ from aiohttp_apispec import docs, request_schema, response_schema
 from marshmallow import INCLUDE, Schema, fields
 from pydid.verification_method import (
     Ed25519VerificationKey2018,
+    KnownVerificationMethods,
 )
 
 from ...admin.request_context import AdminRequestContext
@@ -147,6 +148,7 @@ async def verify(request: web.BaseRequest):
                 vmethod = await resolver.dereference(
                     profile,
                     doc["proof"]["verificationMethod"],
+                    cls=KnownVerificationMethods,
                 )
 
                 if not isinstance(vmethod, SUPPORTED_VERIFICATION_METHOD_TYPES):

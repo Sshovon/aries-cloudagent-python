@@ -139,8 +139,9 @@ class TestInvitationMessage(TestCase):
             "services": [123],
         }
 
-        errs = InvitationMessageSchema().validate(obj_x)
-        assert errs and "services" in errs
+        invi_schema = InvitationMessageSchema()
+        with pytest.raises(test_module.ValidationError):
+            invi_schema.validate_fields(obj_x)
 
     def test_assign_msg_type_version_to_model_inst(self):
         test_msg = InvitationMessage()
